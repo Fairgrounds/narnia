@@ -97,7 +97,7 @@ write(ofd, buf, sizeof(buf)-1):
    0x080485d7 <+204>:   pushl  -0x4(%ebp)               pushing address of file pointed to by ofd onto stack
    0x080485da <+207>:   call   0x80483e0 <write@plt>
 
-The write function transfers 31 bytes of buf into the file address pointed at by ofd. let's eye the scalpel and dig deeper:
+The write function transfers 31 bytes of buf into the file address pointed at by ofd. let's pick up the scalpel and continue to dig deeper:
 
 
 
