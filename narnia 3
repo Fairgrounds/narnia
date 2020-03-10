@@ -97,8 +97,26 @@ write(ofd, buf, sizeof(buf)-1):
    0x080485d7 <+204>:   pushl  -0x4(%ebp)               pushing address of file pointed to by ofd onto stack
    0x080485da <+207>:   call   0x80483e0 <write@plt>
 
-The write function transfers 31 bytes of buf into the file address pointed at by ofd. let's pick up the scalpel and continue to dig deeper:
+The write function transfers 31 bytes of buf into the file address pointed at by ofd. 
+let's pick up the scalpel and continue to dig deeper:
 
+a look at ofd and buf BEFORE write function:
+r $(python -c 'print "/tmp/" + "U"*26')
+Breakpoint 1, 0x080485c5 in main ()
+(gdb) x/24 $ebp-0x58
+0xffffd660:     0xffffffff      0xf7fc5000      0xf7e1ee18      0xf7fd2e28      32 byte buf
+0xffffd670:     0xf7fc5000      0xffffd754      0xf7ffcd00      0x00200000      32 byte buf
+0xffffd680:     0x706d742f      0x5555552f      0x55555555      0x55555555      32 byte ifile
+0xffffd690:     0x55555555      0x55555555      0x55555555      0x00555555      32 byte ifile
+0xffffd6a0:     0x7665642f      0x6c756e2f      0x0000006c      0x00000000      16 byte ofile
+0xffffd6b0:     0x00000004      0x00000003      0x00000000      0xf7e2a286      ifd, ofd, ebp, eip
 
-
-
+ofd and buf AFTER write function:
+(gdb) x/24x  $ebp-0x58
+0xffffd660:     0x74736574      0xf7fc0a21      0xf7e1ee18      0xf7fd2e28
+0xffffd670:     0xf7fc5000      0xffffd754      0xf7ffcd00      0x00200000
+0xffffd680:     0x706d742f      0x5555552f      0x55555555      0x55555555
+0xffffd690:     0x55555555      0x55555555      0x55555555      0x00555555
+0xffffd6a0:     0x7665642f      0x6c756e2f      0x0000006c      0x00000000
+0xffffd6b0:     0x00000004      0x00000003      0x00000000      0xf7e2a286
+no change... to ofile...
