@@ -1,5 +1,4 @@
-NARNIA LEVEL 3
-the C file:
+---NARNIA LEVEL 3---
 
 int main(int argc, char **argv){
     int  ifd,  ofd;
