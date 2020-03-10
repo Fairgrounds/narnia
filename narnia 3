@@ -1,13 +1,37 @@
-narnia level 3:
+NARNIA LEVEL 3
+the C file:
 
-no overflow, but full buffer: 
-/tmp/UUUUUUUUUUUUUUUUUUUUUU.txt
-first acceptable char string overflowing one char:
-/tmp/UUUUUUUUUUUUUUUUUUUUUUU.txt
+int main(int argc, char **argv){
+    int  ifd,  ofd;
+    char ofile[16] = "/dev/null";
+    char ifile[32];
+    char buf[32];
+    if(argc != 2){
+        printf("usage, %s file, will send contents of file 2 /dev/null\n",argv[0]);
+        exit(-1);
+    }
+    /* open files */
+    strcpy(ifile, argv[1]);
+    if((ofd = open(ofile,O_RDWR)) < 0 ){
+        printf("error opening %s\n", ofile);
+        exit(-1);
+    }
+    if((ifd = open(ifile, O_RDONLY)) < 0 ){
+        printf("error opening %s\n", ifile);
+        exit(-1);
+    }
+    /* copy from file1 to file2 */
+    read(ifd, buf, sizeof(buf)-1);
+    write(ofd,buf, sizeof(buf)-1);
+    printf("copied contents of %s to a safer place... (%s)\n",ifile,ofile);
+    /* close 'em */
+    close(ifd);
+    close(ofd);
+    exit(1);
+}
 
-output from gdb (note 32 char string of U's):
+output from gdb after strcpy is loaded with a 31 byte "U" string. the string is stored at $ebp-0x38.
 
-note where the registers are located.
 (gdb) x/28x $esp
 0xffffd658:     0xffffd680(esp)  0xffffd88e       0xffffffff       0xf7fc5000
 0xffffd668:     0xf7e1ee18       0xf7fd2e28       0xf7fc5000       0xffffd754
@@ -25,6 +49,11 @@ Stack level 0, frame at 0xffffd6a0:
  Locals at 0xffffd698, Previous frame's sp is 0xffffd6a0
  Saved registers:
   ebp at 0xffffd698, eip at 0xffffd69c
+
+you can see the null terminator that completes the 32 byte array @ 0xffffd698+4
+also, found the esp, ebp, eip register through some digging.     @ 0xffffd658, 0xffffd6b8, 0xffffd6b8 + 4 respectively
+ 
+
 
 1.) attempting to solve level 3 with solution from level 2.
 
