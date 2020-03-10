@@ -82,14 +82,14 @@ As per expectation, no shell appears, so we'll move on.
 The size of buf is 32 bytes and the file pointed to by ofd is 16 characters long. so something can be overwritten here. 
 Assembly for read/write functions:
 
-read(ifd, buf, sizeof(buf)-1)
+read(ifd, buf, sizeof(buf)-1):
    0x080485c0 <+181>:   push   $0x1f                    pushing 31, sizeof(buf)-1 onto the stack
    0x080485c2 <+183>:   lea    -0x58(%ebp),%eax
    0x080485c5 <+186>:   push   %eax                     pushing buf, located at -0x58ebp onto stack
    0x080485c6 <+187>:   pushl  -0x8(%ebp)               pushing address of file pointed to by ifd onto stack
    0x080485c9 <+190>:   call   0x8048380 <read@plt>
 
-write(ofd, buf, sizeof(buf)-1)
+write(ofd, buf, sizeof(buf)-1):
    0x080485ce <+195>:   add    $0xc,%esp
    0x080485d1 <+198>:   push   $0x1f                    pushing 31, sizeof(buf)-1 onto the stack
    0x080485d3 <+200>:   lea    -0x58(%ebp),%eax
@@ -97,7 +97,8 @@ write(ofd, buf, sizeof(buf)-1)
    0x080485d7 <+204>:   pushl  -0x4(%ebp)               pushing address of file pointed to by ofd onto stack
    0x080485da <+207>:   call   0x80483e0 <write@plt>
 
-the write function transfers 31 bytes of buf into the file address pointed at by ofd. let's pull out the scalpel and go deeper
-under the hood:
+The write function transfers 31 bytes of buf into the file address pointed at by ofd. let's eye the scalpel and dig deeper:
+
+
 
 
