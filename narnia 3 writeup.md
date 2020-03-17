@@ -70,6 +70,6 @@ Breakpoint 1, 0x0804855f in main ()
 
 Yup! It's working as intended. The buffer is 32 bytes long. Anything over that will overwrite registers under ebp, like this: 
 
-![Image of Narnia3A]
-(https://www.outbrain.com/techblog/wp-content/uploads/2017/05/road-sign-361513_960_720.jpg)
+![]
+(/pictures/narnia3.png)
 
