@@ -1,7 +1,6 @@
 **Narnia Level 3**
-
 narnia3.c: 
-`
+```
 int main(int argc, char **argv) {
 
     int  ifd,  ofd;
@@ -35,7 +34,9 @@ int main(int argc, char **argv) {
     close(ofd);
 
     exit(1);
-} `
+} 
+```
+
 The program takes a file name argument and sends the contents of the file to /dev/null. 
 There's appears to be a potential buffer overflow in the program in strcpy.
 
