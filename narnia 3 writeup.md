@@ -2,7 +2,7 @@
 
 narnia3.c:
 int main(int argc, char **argv) {
-
+s
     int  ifd,  ofd;
     char ofile[16] = "/dev/null";
     char ifile[32];
