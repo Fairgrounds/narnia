@@ -44,21 +44,32 @@ strcpy function:
 ```
    strcpy(ifile, argv[1]);
 ```
-
 strcpy assembly:
-```diff
-   !0x0804854d <+66>:    mov    0xc(%ebp),%eax
-   !0x08048550 <+69>:    add    $0x4,%eax
-   !0x08048553 <+72>:    mov    (%eax),%eax
+```
+   0x0804854d <+66>:    mov    0xc(%ebp),%eax <--
+   0x08048550 <+69>:    add    $0x4,%eax
+   0x08048553 <+72>:    mov    (%eax),%eax
    0x08048555 <+74>:    push   %eax
-   !0x08048556 <+75>:    lea    -0x38(%ebp),%eax
+   0x08048556 <+75>:    lea    -0x38(%ebp),%eax
    0x08048559 <+78>:    push   %eax
    0x0804855a <+79>:    call   0x80483a0 <strcpy@plt>
 ```
+Taking a look at the arguments of strcpy and its assembly, we can deduce that argv[1] exists at 0xc(%ebp) + 4 and ifile exists at -0x38(%ebp). Let's check that this is occurring post strcpy in gdb.
 
-Taking a look at the arguments of strcpy and its assembly, we can deduce that argv[1] exists at the value of the address @ 0xc(%ebp) + 4 and ifile exists at -0x38(%ebp). Let's take a look in gdb to confirm this shall we?
+```
+(gdb) br * 0x0804855f
+Breakpoint 1 at 0x804855f
+(gdb) r
+Starting program: /narnia/narnia3 $(python -c 'print "\x90"*31')
 
-`
+Breakpoint 1, 0x0804855f in main ()
+(gdb) x/8x $ebp-0x38
+0xffffd680:     0x90909090      0x90909090      0x90909090      0x90909090
+0xffffd690:     0x90909090      0x90909090      0x90909090      0x00909090
+```
 
-`
+Yup! It's working as intended. The buffer is 32 bytes long. Anything over that will overwrite registers under ebp, like this: 
+
+![Image of Narnia3A]
+(https://raw.githubusercontent.com/genek95/narnia/master/pictures/narnia3.png)
 
