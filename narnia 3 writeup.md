@@ -1,4 +1,4 @@
-**Narnia Level 3**
+**Narnia Level 3** <br>
 narnia3.c: 
 ```
 int main(int argc, char **argv) {
@@ -40,6 +40,11 @@ int main(int argc, char **argv) {
 The program takes a file name argument and sends the contents of the file to /dev/null. 
 There's appears to be a potential buffer overflow in the program in strcpy.
 
+strcpy function:
+```
+   strcpy(ifile, argv[1]);
+```
+
 strcpy assembly:
 ```
    0x0804854d <+66>:    mov    0xc(%ebp),%eax
@@ -50,5 +55,5 @@ strcpy assembly:
    0x08048559 <+78>:    push   %eax
    0x0804855a <+79>:    call   0x80483a0 <strcpy@plt>
 ```
-```
-```
+
+Taking a look at the arguments of strcpy and its assembly, we can deduce that argv[1] exists at 0xc(%ebp) and ifile exists at -0x38(%ebp).
