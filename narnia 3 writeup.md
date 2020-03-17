@@ -1,6 +1,7 @@
 **Narnia Level 3**
 
 narnia3.c:
+int main(int argc, char **argv) {
 
     int  ifd,  ofd;
     char ofile[16] = "/dev/null";
