@@ -46,14 +46,19 @@ strcpy function:
 ```
 
 strcpy assembly:
-```
-   0x0804854d <+66>:    mov    0xc(%ebp),%eax
-   0x08048550 <+69>:    add    $0x4,%eax
-   0x08048553 <+72>:    mov    (%eax),%eax
+```diff
+   !0x0804854d <+66>:    mov    0xc(%ebp),%eax
+   !0x08048550 <+69>:    add    $0x4,%eax
+   !0x08048553 <+72>:    mov    (%eax),%eax
    0x08048555 <+74>:    push   %eax
-   0x08048556 <+75>:    lea    -0x38(%ebp),%eax
+   !0x08048556 <+75>:    lea    -0x38(%ebp),%eax
    0x08048559 <+78>:    push   %eax
    0x0804855a <+79>:    call   0x80483a0 <strcpy@plt>
 ```
 
-Taking a look at the arguments of strcpy and its assembly, we can deduce that argv[1] exists at 0xc(%ebp) and ifile exists at -0x38(%ebp).
+Taking a look at the arguments of strcpy and its assembly, we can deduce that argv[1] exists at the value of the address @ 0xc(%ebp) + 4 and ifile exists at -0x38(%ebp). Let's take a look in gdb to confirm this shall we?
+
+`
+
+`
+
