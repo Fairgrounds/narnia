@@ -70,5 +70,9 @@ Breakpoint 1, 0x0804855f in main ()
 
 Yup! It's working as intended. The buffer is 32 bytes long. Anything over that will overwrite registers under ebp, like this: ![](pictures/narnia3.png)
 
-So it looks like we are able to manipulate ofile which currently hosts /dev/null. (2f 64 65 76 2f 6e 75 6c 6c) We could input the contents of /etc/narnia_pass/narnia4 to the program and have it transferred to a file of our choosing! In our case, I will attempt to write to /tmp/bbb. (2f 74 6d 70 2f 62 62 62)
+So it looks like we are able to manipulate ofile which currently hosts /dev/null. (2f 64 65 76 2f 6e 75 6c 6c) We could input the contents of /etc/narnia_pass/narnia4 to the program and have it transferred to a file of our choosing!
+
+
+
+symbolic link. 
 
