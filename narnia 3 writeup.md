@@ -72,7 +72,7 @@ Yup! It's working as intended. The buffer is 32 bytes long. Anything over that w
 
 Through this overflow, it looks like one could overwrite ofile, ibp, obp, ebp, eip, and more! In this case we'll only need to overwrite ofile, as it'll enable us to read the password to the next level:
 
-![](pictures/narnia3_1.png)
+![](pictures/narnia3_0.png)
 
 What is a symlink and why do we need it? A symlink functions very similarly to a shortcut in Windows. It's a file that points to another file. /etc/narnia_pass/narnia4 does not have the sufficient bytes to overflow ifile so we are creating a shortcut that points to it with a longer name. 
 And there we have it! We can now move on to level 4.
