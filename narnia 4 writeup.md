@@ -17,4 +17,10 @@ int main(int argc,char **argv){
 }
 ```
 
-I've never seen an extern char ** environ. I don't know what that means.
+** environ is a pointer to a pointer.
+What does the program do? 
+firstly it does a memset regarding the environ variable.
+then, if an argument is provided it copies it into the char array called buffer. 
+the environ variable is declared but not defined. 
+environ -> ADDRESS -> char.
+so why is it iterating the pointer's pointer? don't understand that.
