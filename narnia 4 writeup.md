@@ -32,5 +32,8 @@ Examining the assembly of the program, specifically the `eax` register at the me
 So after the program runs, the memory at `0xffffd8ac` is overwritten with null bytes until it hits a null byte already there. 
 Now we're going to look at where everything is stored on the stack.
 
-
+int i
+buffer[256]
+environ
+strcpy
 
