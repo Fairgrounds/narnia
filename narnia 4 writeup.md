@@ -17,18 +17,11 @@ int main(int argc,char **argv){
 }
 ```
 
-Examining the assembly of the program, specifically the `eax` register at the memset instruction, I found the location of environ[i]. 
-`
-   0x080484e6 <+59>:    push   %ecx
-   0x080484e7 <+60>:    push   $0x0
-   0x080484e9 <+62>:    push   %eax
-   0x080484ea <+63>:    call   0x8048390 <memset@plt>
-`
-`
-   Breakpoint 1, 0x080484ea in main ()
-   (gdb) x/x $eax
-   0xffffd8ac:     0x415f434c
-`
+This level appears to be similar to Narnia2, where we had to rewrite the return address of the program to execute our shell code. The key difference appears to be the existence of environ a pointer to a pointer to a char.
+
+I attempted a vanilla return address overwrite, and got a segfault. The environ variable is likely interfering with our ability to return to an address of our choosing, so I will dig deeper.
+
+
 So after the program runs, the memory at `0xffffd8ac` is overwritten with null bytes until it hits a null byte already there. 
 Now we're going to look at where everything is stored on the stack.
 
@@ -37,3 +30,4 @@ argv[x] - ebp+0xc
 buffer[256] - ebp-0x104 
 environ[x] - 0xffffd8ac
 i really dont get the point of the extern environ variable. is it preventing me from doing shellcode stuff like in narnia2? returning to narnia2 for a refresher.
+
